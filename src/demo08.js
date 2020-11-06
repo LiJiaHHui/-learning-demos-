@@ -1,28 +1,30 @@
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
-import $ from 'jquery'
 class MyBind extends Component{
     constructor(props){
         super(props);
         this.state={
-            username: '',
-            lastGistUrl: ''
+            opacity:1.0
         }
     }
     componentDidMount(){
-        $.get(this.props.source, function(result) {
-            var lastGist = result[0];
+        this.timer=setInterval(function(){
+            var opacity=this.state.opacity;
+            opacity-=.05;
+            if(opacity<0.1){
+                opacity=1
+            }
             this.setState({
-              username: lastGist.owner.login,
-              lastGistUrl: lastGist.html_url
-            });
-          }.bind(this));
-        }
+                opacity:opacity
+            })
+        }.bind(this),100
+        )
+    }
     render(){
     return (
-        <div>
-              {this.state.username}'s last gist is <a href={this.state.lastGistUrl}>here</a>.
-            </div>
+        <div style={{opacity:this.state.opacity}}>
+            hello {this.props.name}
+       </div>
     )
         
     }
@@ -31,7 +33,7 @@ class Demo extends Component{
     render(){
         return(
             <div>
-                <MyBind  source="https://api.github.com/users/octocat/gists" >
+                <MyBind name="girl">
                 </MyBind>
             </div>
         )
